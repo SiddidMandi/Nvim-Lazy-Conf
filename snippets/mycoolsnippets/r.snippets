@@ -1,0 +1,200 @@
+# A valid snippet should starts with:
+#
+#		snippet trigger_word [ "description" [ options ] ]
+#
+# and end with:
+#
+#		endsnippet
+#
+# Snippet options:
+#
+#		b - Beginning of line.
+#		i - In-word expansion.
+#		w - Word boundary.
+#		r - Regular expression
+#		e - Custom context snippet
+#		A - Snippet will be triggered automatically, when condition matches.
+#
+# Basic example:
+#
+#		snippet emitter "emitter properties" b
+#		private readonly ${1} = new Emitter<$2>()
+#		public readonly ${1/^_(.*)/$1/}: Event<$2> = this.$1.event
+#		endsnippet
+#
+# Online reference: https://github.com/SirVer/ultisnips/blob/master/doc/UltiSnips.txt
+
+snippet mean
+mean(${1} , na.rm = TRUE)
+endsnippet
+
+snippet median
+median(${1} , na.rm = TRUE)
+endsnippet
+
+snippet assignCSV
+theData <- read.csv("${1:Relative path}", header = TRUE, sep = ',')
+endsnippet
+
+snippet IQR
+Q1 <- quantile(${1:setDOLLASIGNcolumn}, probs=0.25)
+Q3 <- quantile(${1:setDOLLASIGNcolumn}, probs=0.75)
+IQR1 <- Q3 - Q1
+IQR1
+endsnippet
+
+snippet matrix
+${1:name} <- matrix(c(${2:valuesR2L}), nrow=${3:row}, ncol=${4:col}, byrow=TRUE)
+endsnippet
+
+snippet initiateTex
+install.packages(c("knitr","xfun","evaluate","highr"), lib="/home/siddid/Rpackages")
+#once installed just run the commands below
+#kp to knit current file
+
+.libPaths("/home/siddid/Rpackages")
+library("xfun")
+library("highr")
+library("evaluate")
+library("knitr")
+endsnippet
+
+snippet tcsv 
+read.tcsv = function(file, header=TRUE, sep=",", ...) {
+
+  n = max(count.fields(file, sep=sep), na.rm=TRUE)
+  x = readLines(file)
+
+  .splitvar = function(x, sep, n) {
+    var = unlist(strsplit(x, split=sep))
+    length(var) = n
+    return(var)
+  }
+
+  x = do.call(cbind, lapply(x, .splitvar, sep=sep, n=n)) x = apply(x, 1, paste, collapse=sep) 
+  out = read.csv(text=x, sep=sep, header=header, ...)
+ return(out)
+
+}
+endsnippet
+
+snippet dread
+ddf <- read.csv("${1:name}"${2:,skip= ${3:v}}${4:,nrow= ${5:v}})
+endsnippet
+
+snippet sum
+sum(ddf$${1:condition1} ${2: & ddf$${3: condition2}} )
+endsnippet
+
+snippet subsetter 
+ddf[which(ddf$${1:Column}==${2:condition}),] #stirngs req ''
+endsnippet
+
+snippet regLineEquation
+fit <- lm(${1:y var}~ ${2:x var}, data=${3:ddf name, not column})
+coef(fit)
+endsnippet
+
+snippet sumtype "sum of certain types"
+sum(ddf$${1:Column}=="")
+endsnippet
+
+snippet ssampler "random sample of n"
+set.seed(69420)
+smpl <- ddf[sample(nrow(ddf), ${1:number}),]
+$2
+endsnippet
+
+snippet png "High res"
+png("$1",res=300, width=1280, height=720)
+endsnippet
+
+snippet BoxPlots "multiple box plots"
+budgets <- list(ddf$Production.Budget, animation_df$Production.Budget)
+# Create the boxplot with both data frames
+boxplot(budgets, names=c("All Genres", "Animation"), 
+        ylab="Production Budget", main="Boxplot of Production Budget by Genre")
+endsnippet
+
+snippet singleBoxPlot "1 boxplot"
+boxplot(
+ddf$${1:x variable} ~ ddf$${1:y variable},
+xlab= "x variable",
+ylab = "y variable",
+main = "Title"
+)
+endsnippet
+
+snippet boxplots "the ggplot one"
+ggplot(ddf, aes(x = discrete varible, y = summary variable)) +
+  geom_boxplot(fill = "lightblue", color = "blue") +
+  labs(
+    title = "The title",
+    x = "discrete varible",
+    y = "summary variable
+  ) +
+  theme_minimal()
+endsnippet
+
+snippet densityPlot "density curve"
+ggplot(ddf, aes(x = variable dolla sign name)) +
+  geom_density(fill = "lightblue", color = "blue", alpha = 0.6) +
+  labs(
+    title = "The title",
+    x = "Variable dolla sign name",
+    y = "Density"
+  ) +
+  theme_minimal()
+endsnippet
+
+snippet multipleDensitiesCategory "multiple curves split up by category"
+ggplot(ddf, aes(x = Entry.score)) +
+  geom_density(aes(fill = Qualification), alpha = 0.6) +
+  labs(
+    title = "Density Plot of Entry.score by Qualification",
+    x = "Entry.score",
+    y = "Density"
+  ) +
+  scale_fill_manual(values = c("A-Levels" = "lightblue", "Polytechnic" = "lightgreen")) +
+  theme_minimal()
+endsnippet
+
+snippet summaryTabledplyr "summary table"
+library(dplyr)
+# Create a summary table
+summary_table <- ddf %>%
+  group_by(School) %>%
+  summarize(
+    Mean_Income = mean(Monthly_income, na.rm = TRUE),
+    Median_Income = median(Monthly_income, na.rm = TRUE),
+    Min_Income = min(Monthly_income, na.rm = TRUE),
+    Max_Income = max(Monthly_income, na.rm = TRUE)
+  )
+endsnippet
+
+snippet summaryTableLoop ""
+# Get unique school names
+unique_schools <- unique(ddf$School)
+
+# Create an empty list to store summary statistics for each school
+summary_stats_list <- list()
+
+# Iterate through each school and calculate summary statistics
+for (school in unique_schools) {
+  # Subset the data for the current school
+  subset_data <- ddf[ddf$School == school, ]
+  
+  # Calculate summary statistics
+  summary_stats <- summary(subset_data$Monthly_income)
+  
+  # Store the summary statistics in the list
+  summary_stats_list[[school]] <- summary_stats
+}
+
+# Print the summary statistics for each school
+for (school in unique_schools) {
+  cat("Summary statistics for School:", school, "\n")
+  print(summary_stats_list[[school]])
+  cat("\n")
+}
+endsnippet

@@ -1,0 +1,234 @@
+# A valid snippet should starts with:
+#
+#		snippet trigger_word [ "description" [ options ] ]
+#
+# and end with:
+#
+#		endsnippet
+#
+# Snippet options:
+#
+#		b - Beginning of line.
+#		i - In-word expansion.
+#		w - Word boundary. r - Regular expression e - Custom context snippet
+#		A - Snippet will be triggered automatically, when condition matches.
+#
+# Basic example:
+#
+#		snippet emitter "emitter properties" b
+#		private readonly ${1} = new Emitter<$2>()
+#		public readonly ${1/^_(.*)/$1/}: Event<$2> = this.$1.event
+#		endsnippet
+#
+# Online reference: https://github.com/SirVer/ultisnips/blob/master/doc/UltiSnips.txt
+
+snippet nl "Newline" 
+\newline 
+$1
+endsnippet
+
+snippet nli "NewlineIndent" 
+\newline \indent 
+$1
+endsnippet
+
+snippet hypref "Hyperref"
+\hyperref[${1:label}]{$2}
+endsnippet
+
+
+snippet barticle "BasicArticle Template"
+\documentclass[a4 paper, 12pt]{article}
+\usepackage{array, enumitem}
+\usepackage{textcomp, gensymb}
+\usepackage{amsmath, amsfonts}
+\usepackage{tikz, pgfplots}
+\usepackage[colorlinks=true,linkcolor=blue, citecolor=blue, urlcolor=blue]{hyperref}
+\usetikzlibrary{shapes, arrows, positioning, plotmarks}
+%\usepackage[fontsize=13pt]{fontsize}
+\usepackage{${1:ExtraPackage?}}
+
+\pgfplotsset{compat=1.18}
+\pagecolor[HTML]{dddddd}
+\begin{document}
+${2:Start doc here}
+\end{document}
+endsnippet
+
+
+snippet breport "BasicReport Template"
+\documentclass[a4 paper, 12pt]{report}
+\usepackage{array, enumitem}
+\usepackage{textcomp, gensymb}
+\usepackage{amsmath, amsfonts}
+\usepackage{tikz, pgfplots, ${1:extra packages}}
+\usetikzlibrary{shapes, arrows, positioning, plotmarks}
+
+\usepackage[a4paper]{geometry}
+\geometry{${2:lmargin=, rmargin=, tmargin=, bmargin=}}
+\usepackage{setspace} %setting line space, see setstretch
+\usepackage{sectsty} %chapterfont size
+\usepackage{listings} %used for code 
+%\usepackage{minted} %used for code 
+
+
+\chapternumberfont{\normalsize}
+\chaptertitlefont{\Large}
+
+\pgfplotsset{compat=1.18}
+
+\usepackage[linktoc=all, hidelinks, colorlinks=true, linkcolor=blue,
+citecolor=blue, urlcolor=blue]{hyperref}
+\setcounter{tocdepth}{0} %-1: parts 0:parts,chapters 1:parts,chapters,sections 2:subsections...
+
+\setstretch{1.15} %or use \onehalfspacing for 1.5 doublespacing for 2 
+
+\begin{document}
+	${3:Start doc here}
+\end{document}
+endsnippet
+
+snippet contents "Tale of contents"
+%\setcounter{tocdepth}{2} %-1: parts 0:parts,chapters 1:parts,chapters,sections 2:subsections...
+\setcounter{secnumdepth}{0}
+endsnippet
+
+snippet rboxes "Raised boxes titlePage"
+\begin{titlepage}
+	\date{}
+	\author{${1}}
+	\title{
+	\raisebox{0.6ex}{${2}} ${3}
+	\raisebox{0.4ex}{${4}} ${5}
+	\raisebox{0.7ex}{${6}} ${7}
+	\raisebox{0.3ex}{${8}}${9}
+	\raisebox{0.6ex}{${10}}${11}
+	\raisebox{0.3ex}{${12}}${13}
+	}
+\end{titlepage}
+
+\tableofcontents
+endsnippet
+
+snippet simpleTitlePage "mouse lives matter one"
+\begin{titlepage}
+\begin{center}
+	${1:Title}
+
+	\vspace{1.5cm}
+
+	\textbf{Mandi Siddid Umesh}
+
+	\vspace{1cm}
+	Compiled using \LaTeX 
+
+	\vspace{1cm}
+
+	\textbf{NO MOUSES WERE HARMED BY SWEATY PALMS FOR THE MAKING OF THIS
+	DOCUMENT}
+
+	\#mouselivesmatter
+\end{center}
+\end{titlepage}
+endsnippet
+
+snippet bibliographyFull 
+\nocite{*}
+\bibliography{sample.bib}
+\bibliographystyle{IEEEtran}
+endsnippet
+
+snippet bibliography "The Bibliography" 
+\begin{thebibliography}{${1: Number of items}}
+	\bibitem{${2: Item 1}}	
+	Chen, W. (2021, July 23). Commentary: Plenty of fish in the sea?
+	Seafood-loving Singapore may not have its fill in the future. CNA.
+	\href{https://www.channelnewsasia.com/commentary/seafood-sustainable-label-easpiracy-jurong-fishery-port-covid-2037691}{https://www.channelnewsasia.com/commentary/seafood-sustainable-label-easpiracy-jurong-fishery-port-covid-2037691}
+\end{thebibliography}
+endsnippet
+
+snippet codeBlocklisting
+\begin{lstlisting}[language=${1:Language}]
+${2:Code here}
+\end{lstlisting}
+endsnippet
+
+snippet verbatim
+\begin{verbatim}
+
+$1
+\end{verbatim}
+endsnippet
+
+snippet doubleColumn
+\noindent \begin{minipage}{0.5\textwidth}
+\vspace{1cm}
+${1:one column here, number of line breaks must be same}
+	\end{minipage}
+\hspace{2cm}
+\begin{minipage}{0.2\textwidth}
+	${2:other column here, add empty backslash-backslashes to equalize}
+\end{minipage}
+endsnippet
+######
+#MATH#
+######
+
+snippet int "integration"
+\int_{${1:Bottom}} ^${2:Top}
+endsnippet
+
+snippet Omega "Ohm sign"
+\Omega
+endsnippet
+
+snippet radsec "Radians per second"
+\mathrm{rad s^{-1}}
+endsnippet
+
+snippet rmath "Remove math mode"
+\mathrm{$1}$2
+endsnippet
+
+##circuits
+snippet voltageDividerCircuit "One pin coming out from the middle"
+    \draw (0,0) to[short, o-, l=$V_{in}$] (0,0); %horizontal voltage label
+    \draw (0,0) to[short, o-, i=$I_s$] (1,0);
+    \draw (0,0) to[short, -] (1,0);
+    
+    % Resistor
+    \draw (1,0) to[R, l=$R_s$] (2,0);
+    
+    \draw (2,0) to[short, -*] (3,0); %middle voltage, down label
+    \draw (3,0) to[short, -o] (3,-1); 
+    \draw (3,-1) node[short, anchor=north] (short){$V_o$} ++(0,1);
+    
+    % Zener diode
+    \draw (2,0) to[short, -] (4,0);
+    \draw (4,0) to[zD, l=$D$] (5,0);
+    
+    % Ground
+    \draw (5,0) to (6,0) node[ground, rotate=90]{};
+endsnippet
+
+snippet voltageDivDoubleSpace "double space"
+            \draw (0,0) to[short, o-, l=$V_{in}$] (0,0); %horizontal voltage label
+            \draw (0,0) to[short, o-, i=$I_s$] (2,0);
+            \draw (0,0) to[short, -] (2,0);
+            
+            % Resistor
+            \draw (2,0) to[R, l=$R_s$] (3,0);
+            
+            \draw (3,0) to[short, -*] (4,0); %middle voltage, down label
+            \draw (4,0) to[short, -o] (4,-1); 
+            \draw (4,-1) node[short, anchor=north] (short){$V_o$} ++(0,1);
+            
+            % Zener diode
+            \draw (3,0) to[short, -] (5,0);
+            \draw (5,0) to[R, l=$D$] (6,0);
+            
+            % Ground
+            \draw (6,0) to (7,0) node[ground, rotate=90]{};
+       \draw (5,0) to[short, -o] (6,0) node[below, anchor=west] {$V_o$};
+endsnippet
+

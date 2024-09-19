@@ -1,0 +1,114 @@
+# A valid snippet should starts with:
+#
+#		snippet trigger_word [ "description" [ options ] ]
+#
+# and end with:
+#
+#		endsnippet
+#
+# Snippet options:
+#
+#		b - Beginning of line.
+#		i - In-word expansion.
+#		w - Word boundary.
+#		r - Regular expression
+#		e - Custom context snippet
+#		A - Snippet will be triggered automatically, when condition matches.
+#
+# Basic example:
+#
+#		snippet emitter "emitter properties" b
+#		private readonly ${1} = new Emitter<$2>()
+#		public readonly ${1/^_(.*)/$1/}: Event<$2> = this.$1.event
+#		endsnippet
+#
+# Online reference: https://github.com/SirVer/ultisnips/blob/master/doc/UltiSnips.txt
+snippet nl "Newline" 
+\newline 
+$1
+endsnippet
+
+snippet nli "NewlineIndent" 
+\newline \indent 
+$1
+endsnippet
+
+snippet hypref "Hyperref"
+\hyperref[$1]{$2}
+endsnippet
+
+
+snippet barticle "BasicArticle Template"
+\documentclass[a4 paper, 12pt]{article}
+\usepackage{array, enumitem}
+\usepackage{textcomp, gensymb}
+\usepackage{amsmath, amsfonts}
+\usepackage{tikz, pgfplots}
+\usepackage[colorlinks=true,linkcolor=blue]{hyperref}
+\usetikzlibrary{shapes, arrows, positioning, plotmarks}
+\usepackage{${1:ExtraPackage?}}
+
+\pgfplotsset{compat=1.18}
+\pagecolor[HTML]{dddddd}
+\begin{document}
+${2:Start doc here}
+\end{document}
+
+endsnippet
+
+
+snippet breport "BasicReport Template"
+\documentclass[a4 paper, 12pt]{report}
+\usepackage{array, enumitem}
+\usepackage{textcomp, gensymb}
+\usepackage{amsmath, amsfonts}
+\usepackage{tikz, pgfplots, ${1:extra packages}}
+\usetikzlibrary{shapes, arrows, positioning, plotmarks}
+
+\usepackage[a4paper]{geometry}
+\geometry{
+	${2:lmargin=, rmargin=, tmargin=, bmargin=}
+}
+\usepackage{setspace} %setting line space, see setstretch
+\usepackage{sectsty} %chapterfont size
+\usepackage{listing} %used for code 
+%\usepackage{minted} %used for code 
+
+
+\chapternumberfont{\normalsize}
+\chaptertitlefont{\Large}
+
+\pgfplotsset{compat=1.18}
+
+\usepackage[linktoc=all, hidelinks, colorlinks=true, linkcolor=blue]{hyperref}
+\setcounter{tocdepth}{0} %-1: parts 0:parts,chapters 1:parts,chapters,sections 2:subsections...
+
+\setstretch{1.15} %or use \onehalfspacing for 1.5 doublespacing for 2 
+
+\begin{document}
+	${3:Start doc here}
+\end{document}
+endsnippet
+
+snippet rboxes "Raised boxes titlePage"
+\begin{titlepage}
+	\date{}
+	\author{${1}}
+	\title{
+	\raisebox{0.6ex}{${2}} ${3}
+	\raisebox{0.4ex}{${4}} ${5}
+	\raisebox{0.7ex}{${6}} ${7}
+	\raisebox{0.3ex}{${8}}${9}
+	\raisebox{0.6ex}{${10}}${11}
+	\raisebox{0.3ex}{${12}}${13}
+	}
+\end{titlepage}
+endsnippet
+
+######
+#MATH#
+######
+
+snippet int "integration"
+\int_{${1:Bottom}} ^${2:Top}
+endsnippet
