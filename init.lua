@@ -9,7 +9,7 @@ vim.api.nvim_create_autocmd("ColorScheme", {
 			"VertSplit",
 			"SignColumn",
 			"EndOfBuffer",
-			"TablineFill", -- this is specific to how I like my tabline to look like
+			"TablineFill",
 		}
 		for _, name in pairs(highlights) do
 			vim.cmd.highlight(name .. " guibg=none ctermbg=none")
@@ -41,18 +41,18 @@ vim.g.maplocalleader = " "
 require("lazy").setup({
 	--config is after plugin is loaded, init is before
 	{
-		dir = "/home/siddid/.config/nvim/pack/plugins/start/oceanic-next",
+		dir = vim.fn.stdpath("config") .. "/pack/plugins/start/oceanic-next",
+
 		lazy = false,
 		config = function()
 			vim.cmd([[colorscheme OceanicNext]])
 		end,
 	},
-	{ dir = "/home/siddid/.config/nvim/pack/plugins/start/vim-devicons", lazy = false },
+	{ dir = vim.fn.stdpath("config") .. "/pack/plugins/start/vim-devicons", lazy = false },
 	{
 		dir = "/home/siddid/.config/nvim/pack/plugins/start/nerdtree",
-		keys = { "<leader>n" },
 		config = function()
-			require("setup/nerdTree")
+			--require("setup/nerdTree")
 		end,
 	},
 	{
@@ -73,6 +73,19 @@ require("lazy").setup({
 		"folke/noice.nvim",
 		config = function()
 			require("setup/noice")
+		end,
+	},
+	{
+		"nvim-neo-tree/neo-tree.nvim",
+		branch = "v3.x",
+		dependencies = {
+			"nvim-lua/plenary.nvim",
+			"nvim-tree/nvim-web-devicons",
+			"MunifTanjim/nui.nvim",
+		},
+		keys = { "<leader>n" },
+		config = function()
+			vim.api.nvim_set_keymap("n", "<leader>n", ":Neotree toggle<CR>", { noremap = true, silent = true })
 		end,
 	},
 
@@ -112,7 +125,6 @@ require("lazy").setup({
 		end,
 	},
 
-	--{ 'nvim-neo-tree/neo-tree.nvim', requires = { 'nvim-lua/plenary.nvim' }, config = function() require('setup/neo-tree') end },
 	{ "nvim-treesitter/nvim-treesitter", build = ":TSUpdate" },
 
 	-- LSP and Completion
@@ -128,7 +140,6 @@ require("lazy").setup({
 	{ "hrsh7th/cmp-path", event = "InsertEnter" },
 	{ "hrsh7th/cmp-cmdline", event = "InsertEnter" },
 	{ "micangl/cmp-vimtex", ft = "tex", event = "InsertEnter" },
-	--{ 'micangl/cmp-vimtex', event = 'InsertEnter' },
 
 	-- Snippets
 	{ "SirVer/ultisnips", event = "InsertEnter" },
@@ -139,7 +150,8 @@ require("lazy").setup({
 		"williamboman/mason.nvim",
 		exclude = { "viki", "vimwiki", "markdown" },
 		config = function()
-			require("setup/mason-setup")
+			--require("setup/mason-setup")
+			require("mason").setup({ install_root_dir = vim.fn.stdpath("config") .. "/Mason" })
 		end,
 	},
 	{
@@ -147,12 +159,13 @@ require("lazy").setup({
 		lazy = { true },
 		exclude = { "wiki", "vimwiki", "markdown" },
 		config = function()
-			require("setup/lsp-configs")
+			--require("setup/lsp-configs")
+			require("setup/coding/lsp-configs")
 		end,
 	},
 
 	{
-		"williamboman/mason-lspconfig.nvim",
+		"williamboman/mason-lspconfig.nvim", --needed
 		exclude = { "wiki", "vimwiki", "markdown" },
 		config = function()
 			require("mason-lspconfig").setup()
@@ -163,7 +176,7 @@ require("lazy").setup({
 	{
 		"nvimtools/none-ls.nvim",
 		config = function()
-			require("setup/coding")
+			require("setup/coding/null-ls")
 		end,
 	},
 	{
@@ -174,13 +187,13 @@ require("lazy").setup({
 			require("mason-null-ls").setup()
 		end,
 	},
+	{ "tpope/vim-fugitive", lazy = { true }, cmd = { "G" } },
 }, {
 	root = vim.fn.stdpath("config") .. "/lazyPlugs", -- Custom directory for plugins
 })
 
 vim.cmd([[
 set nocompatible
-"set colorscheme=OceanicNext
 filetype on
 filetype plugin on
 filetype indent on
@@ -236,7 +249,6 @@ vim.api.nvim_set_keymap("i", "kj", "<ESC>", { noremap = true, silent = true })
 local mapper = vim.api.nvim_set_keymap
 local opts1 = { noremap = true, silent = true }
 mapper("n", ";", ":", opts1)
-
 mapper("n", "+", ":res +2<CR>", opts1)
 mapper("n", "_", ":res -2<CR>", opts1)
 mapper("n", "-", ":vertical resize -2<CR>", opts1)
