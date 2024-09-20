@@ -49,11 +49,23 @@ require("lazy").setup({
 		end,
 	},
 	{ dir = vim.fn.stdpath("config") .. "/pack/plugins/start/vim-devicons", lazy = false },
+	--{ dir = "/home/siddid/.config/nvim/pack/plugins/start/nerdtree", config = function() --require("setup/nerdTree") end, },
 	{
-		dir = "/home/siddid/.config/nvim/pack/plugins/start/nerdtree",
-		config = function()
-			--require("setup/nerdTree")
-		end,
+		"christoomey/vim-tmux-navigator",
+		cmd = {
+			"TmuxNavigateLeft",
+			"TmuxNavigateDown",
+			"TmuxNavigateUp",
+			"TmuxNavigateRight",
+			"TmuxNavigatePrevious",
+		},
+		keys = {
+			{ "<c-h>", "<cmd><C-U>TmuxNavigateLeft<cr>" },
+			{ "<c-j>", "<cmd><C-U>TmuxNavigateDown<cr>" },
+			{ "<c-k>", "<cmd><C-U>TmuxNavigateUp<cr>" },
+			{ "<c-l>", "<cmd><C-U>TmuxNavigateRight<cr>" },
+			{ "<c-\\>", "<cmd><C-U>TmuxNavigatePrevious<cr>" },
+		},
 	},
 	{
 		"nvim-lualine/lualine.nvim",
@@ -112,7 +124,7 @@ require("lazy").setup({
 		"nvim-telescope/telescope.nvim",
 		commit = "927c10f748e49c543b2d544c321a1245302ff324",
 		tag = "0.1.8", -- Optional: Ensure this tag is compatible or remove if using commit
-		keys = { "<leader>pf" },
+		--keys = { "<leader>pf" },
 		config = function()
 			require("setup/telescope")
 		end,
@@ -172,7 +184,6 @@ require("lazy").setup({
 		end,
 	},
 
-	--{'nvimtools/none-ls.nvim', lazy = {true}, exclude = {'viki', 'vimwiki', 'markdown'}, config = function() require('setup/coding') end  },
 	{
 		"nvimtools/none-ls.nvim",
 		config = function()
@@ -180,14 +191,22 @@ require("lazy").setup({
 		end,
 	},
 	{
-		"jay-babu/mason-null-ls.nvim",
-		lazy = { true },
-		exclude = { "viki", "vimwiki", "markdown" },
+		"tpope/vim-fugitive",
+		--lazy = { true }, cmd = { "G" }, --no need ot lazy
 		config = function()
-			require("mason-null-ls").setup()
+			vim.api.nvim_create_autocmd("CmdlineLeave", {
+				callback = function()
+					local last_cmd = vim.fn.getcmdline()
+					local cmd_type = vim.fn.getcmdtype() -- Get the type of the command (e.g. : for Ex command)
+
+					if cmd_type == ":" and last_cmd:match("^G") then
+						local new_cmd = "vertical " .. last_cmd
+						vim.fn.setcmdline(new_cmd)
+					end
+				end,
+			})
 		end,
 	},
-	{ "tpope/vim-fugitive", lazy = { true }, cmd = { "G" } },
 }, {
 	root = vim.fn.stdpath("config") .. "/lazyPlugs", -- Custom directory for plugins
 })
