@@ -60,10 +60,10 @@ require("lazy").setup({
 			"TmuxNavigatePrevious",
 		},
 		keys = {
-			{ "<c-h>", "<cmd><C-U>TmuxNavigateLeft<cr>" },
-			{ "<c-j>", "<cmd><C-U>TmuxNavigateDown<cr>" },
-			{ "<c-k>", "<cmd><C-U>TmuxNavigateUp<cr>" },
-			{ "<c-l>", "<cmd><C-U>TmuxNavigateRight<cr>" },
+			{ "<c-h>",  "<cmd><C-U>TmuxNavigateLeft<cr>" },
+			{ "<c-j>",  "<cmd><C-U>TmuxNavigateDown<cr>" },
+			{ "<c-k>",  "<cmd><C-U>TmuxNavigateUp<cr>" },
+			{ "<c-l>",  "<cmd><C-U>TmuxNavigateRight<cr>" },
 			{ "<c-\\>", "<cmd><C-U>TmuxNavigatePrevious<cr>" },
 		},
 	},
@@ -87,6 +87,7 @@ require("lazy").setup({
 			require("setup/noice")
 		end,
 	},
+
 	{
 		"nvim-neo-tree/neo-tree.nvim",
 		branch = "v3.x",
@@ -97,6 +98,12 @@ require("lazy").setup({
 		},
 		keys = { "<leader>n" },
 		config = function()
+			require("neo-tree").setup({
+				filesystem = {
+					bind_to_cwd = false, -- Prevent Neo-tree from changing the working directory
+					--cwd_target = { current_dir = true }, -- Ensure Neo-tree uses the current working directory
+				},
+			})
 			vim.api.nvim_set_keymap("n", "<leader>n", ":Neotree toggle<CR>", { noremap = true, silent = true })
 		end,
 	},
@@ -109,7 +116,7 @@ require("lazy").setup({
 			require("setup/vimwiki")
 		end,
 	},
-	{ "jalvesaq/Nvim-R", ft = { "R", "r" } },
+	{ "jalvesaq/Nvim-R",      ft = { "R", "r" } },
 	{
 		"lervag/vimtex",
 		ft = { "tex" },
@@ -119,7 +126,7 @@ require("lazy").setup({
 	},
 
 	-- Treesitter
-	"nvim-lua/plenary.nvim",
+	{ "nvim-lua/plenary.nvim" },
 	{
 		"nvim-telescope/telescope.nvim",
 		commit = "927c10f748e49c543b2d544c321a1245302ff324",
@@ -137,7 +144,7 @@ require("lazy").setup({
 		end,
 	},
 
-	{ "nvim-treesitter/nvim-treesitter", build = ":TSUpdate" },
+	{ "nvim-treesitter/nvim-treesitter",     build = ":TSUpdate" },
 
 	-- LSP and Completion
 	{
@@ -147,14 +154,14 @@ require("lazy").setup({
 			require("setup/all-cmp")
 		end,
 	},
-	{ "hrsh7th/cmp-nvim-lsp", event = "InsertEnter" },
-	{ "hrsh7th/cmp-buffer", event = "InsertEnter" },
-	{ "hrsh7th/cmp-path", event = "InsertEnter" },
-	{ "hrsh7th/cmp-cmdline", event = "InsertEnter" },
-	{ "micangl/cmp-vimtex", ft = "tex", event = "InsertEnter" },
+	{ "hrsh7th/cmp-nvim-lsp",                event = "InsertEnter" },
+	{ "hrsh7th/cmp-buffer",                  event = "InsertEnter" },
+	{ "hrsh7th/cmp-path",                    event = "InsertEnter" },
+	{ "hrsh7th/cmp-cmdline",                 event = "InsertEnter" },
+	{ "micangl/cmp-vimtex",                  ft = "tex",           event = "InsertEnter" },
 
 	-- Snippets
-	{ "SirVer/ultisnips", event = "InsertEnter" },
+	{ "SirVer/ultisnips",                    event = "InsertEnter" },
 	{ "quangnguyen30192/cmp-nvim-ultisnips", event = "InsertEnter" },
 
 	--code editing
@@ -278,8 +285,8 @@ mapper("n", "x", '"_x', opts1) --if this no work see below -idk how to do
 mapper("x", "x", '"_x', opts1)
 mapper("n", "dw", 'b"_dw', opts1)
 mapper("n", "daw", 'b"_dw', opts1)
-mapper("v", "<S-i>", "^", opts1) -- stay in normal mode ok for visual
-mapper("v", "<S-a>", "$", opts1) -- stay in normal mode
+mapper("v", "<S-i>", "^", opts1)   -- stay in normal mode ok for visual
+mapper("v", "<S-a>", "$", opts1)   -- stay in normal mode
 mapper("v", "<S-Y>", '"+y', opts1) -- stay in normal mode
 
 vim.cmd([[
