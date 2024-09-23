@@ -301,3 +301,18 @@ hi CurSearch ctermfg=cyan guibg=darkblue guifg=#ffffff gui=bold
 hi IncSearch ctermfg=cyan guibg=darkblue guifg=#ffffff gui=bold
 hi SpellBad ctermbg=red guibg=red
 ]])
+
+vim.api.nvim_create_autocmd("CmdlineLeave", {
+  callback = function()
+    local last_cmd = vim.fn.getcmdline()
+    --local filetype = vim.bo.filetype
+    local cmd_type = vim.fn.getcmdtype()
+    --print(cmd_type)
+
+    if cmd_type == ":" and (last_cmd == "G" or last_cmd == "G log") then
+      local new_cmd = "vertical " .. last_cmd
+      print("making vert",last_cmd )
+      vim.fn.setcmdline(new_cmd)
+    end
+  end,
+})
