@@ -159,6 +159,7 @@ require("lazy").setup({
 	{ "hrsh7th/cmp-path",                    event = "InsertEnter" },
 	{ "hrsh7th/cmp-cmdline",                 event = "InsertEnter" },
 	{ "micangl/cmp-vimtex",                  ft = "tex",           event = "InsertEnter" },
+	{ "f3fora/cmp-spell",                    ft = "tex",           event = "InsertEnter" },
 
 	-- Snippets
 	{ "SirVer/ultisnips",                    event = "InsertEnter" },
@@ -301,3 +302,5 @@ hi CurSearch ctermfg=cyan guibg=darkblue guifg=#ffffff gui=bold
 hi IncSearch ctermfg=cyan guibg=darkblue guifg=#ffffff gui=bold
 hi SpellBad ctermbg=red guibg=red
 ]])
+
+vim.opt.spelllang = { "en_us" }
