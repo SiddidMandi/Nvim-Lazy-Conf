@@ -80,8 +80,8 @@ require("lazy").setup({
 		end,
 	},
 	-- UI enhancements
-	{ "MunifTanjim/nui.nvim" },
-	{ "rcarriga/nvim-notify" },
+	{ "MunifTanjim/nui.nvim", opts = {} },
+	{ "rcarriga/nvim-notify", opts = {} },
 	{
 		"folke/noice.nvim",
 		config = function()
@@ -169,10 +169,8 @@ require("lazy").setup({
 	{
 		"williamboman/mason.nvim",
 		exclude = { "viki", "vimwiki", "markdown" },
-		config = function()
-			--require("setup/mason-setup")
-			require("mason").setup({ install_root_dir = vim.fn.stdpath("config") .. "/Mason" })
-		end,
+    opts = {install_root_dir = vim.fn.stdpath("config") .. "/Mason" } -- for default directory
+    -- opts = {} -- for default directory, opts does require("plugin").setup(opts)
 	},
 	{
 		"neovim/nvim-lspconfig",
@@ -187,9 +185,7 @@ require("lazy").setup({
 	{
 		"williamboman/mason-lspconfig.nvim", --needed
 		exclude = { "wiki", "vimwiki", "markdown" },
-		config = function()
-			require("mason-lspconfig").setup()
-		end,
+    opts = {}
 	},
 
 	{
@@ -282,7 +278,7 @@ vim.cmd([[
 ]])
 
 vim.cmd([[
-hi Search ctermfg=cyan guibg=darkblue guifg=#ffffff gui=bold
+hi Search ctermfg=cyan ctermbg=black guibg=darkblue guifg=#ffffff gui=bold
 hi CurSearch ctermfg=cyan guibg=darkblue guifg=#ffffff gui=bold
 hi IncSearch ctermfg=cyan guibg=darkblue guifg=#ffffff gui=bold
 hi SpellBad ctermbg=red guibg=red
