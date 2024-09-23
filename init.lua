@@ -19,7 +19,8 @@ vim.api.nvim_create_autocmd("ColorScheme", {
 
 vim.cmd([[au BufRead,BufNewFile *.wiki set filetype=vimwiki]])
 
-local lazypath = vim.fn.stdpath("config") .. "/lazyPlugs/lazy.nvim"
+--local lazypath = vim.fn.stdpath("config") .. "/lazyPlugs/lazy.nvim"
+local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
 if not vim.loop.fs_stat(lazypath) then
 	vim.fn.system({
 		"git",
@@ -79,8 +80,8 @@ require("lazy").setup({
 		end,
 	},
 	-- UI enhancements
-	{ "MunifTanjim/nui.nvim" },
-	{ "rcarriga/nvim-notify" },
+	{ "MunifTanjim/nui.nvim", opts = {} },
+	{ "rcarriga/nvim-notify", opts = {} },
 	{
 		"folke/noice.nvim",
 		config = function()
@@ -169,10 +170,8 @@ require("lazy").setup({
 	{
 		"williamboman/mason.nvim",
 		exclude = { "viki", "vimwiki", "markdown" },
-		config = function()
-			--require("setup/mason-setup")
-			require("mason").setup({ install_root_dir = vim.fn.stdpath("config") .. "/Mason" })
-		end,
+    opts = {install_root_dir = vim.fn.stdpath("config") .. "/Mason" } -- for default directory
+    -- opts = {} -- for default directory, opts does require("plugin").setup(opts)
 	},
 	{
 		"neovim/nvim-lspconfig",
@@ -187,9 +186,7 @@ require("lazy").setup({
 	{
 		"williamboman/mason-lspconfig.nvim", --needed
 		exclude = { "wiki", "vimwiki", "markdown" },
-		config = function()
-			require("mason-lspconfig").setup()
-		end,
+    opts = {}
 	},
 
 	{
@@ -198,25 +195,10 @@ require("lazy").setup({
 			require("setup/coding/null-ls")
 		end,
 	},
-	{
-		"tpope/vim-fugitive",
-		--lazy = { true }, cmd = { "G" }, --no need ot lazy
-		config = function()
-			vim.api.nvim_create_autocmd("CmdlineLeave", {
-				callback = function()
-					local last_cmd = vim.fn.getcmdline()
-					local cmd_type = vim.fn.getcmdtype() -- Get the type of the command (e.g. : for Ex command)
-
-					if cmd_type == ":" and last_cmd:match("^G") then
-						local new_cmd = "vertical " .. last_cmd
-						vim.fn.setcmdline(new_cmd)
-					end
-				end,
-			})
-		end,
-	},
+	{ "tpope/vim-fugitive" },
 }, {
-	root = vim.fn.stdpath("config") .. "/lazyPlugs", -- Custom directory for plugins
+	--root = vim.fn.stdpath("config") .. "/lazyPlugs", -- Custom directory for plugins
+	root = vim.fn.stdpath("data") .. "/lazyPlugs", -- .local
 })
 
 vim.cmd([[
@@ -297,10 +279,24 @@ vim.cmd([[
 ]])
 
 vim.cmd([[
-hi Search ctermfg=cyan guibg=darkblue guifg=#ffffff gui=bold
+hi Search ctermfg=cyan ctermbg=black guibg=darkblue guifg=#ffffff gui=bold
 hi CurSearch ctermfg=cyan guibg=darkblue guifg=#ffffff gui=bold
 hi IncSearch ctermfg=cyan guibg=darkblue guifg=#ffffff gui=bold
 hi SpellBad ctermbg=red guibg=red
 ]])
 
 vim.opt.spelllang = { "en_us" }
+vim.api.nvim_create_autocmd("CmdlineLeave", {
+  callback = function()
+    local last_cmd = vim.fn.getcmdline()
+    --local filetype = vim.bo.filetype
+    local cmd_type = vim.fn.getcmdtype()
+    --print(cmd_type)
+
+    if cmd_type == ":" and (last_cmd == "G" or last_cmd == "G log") then
+      local new_cmd = "vertical " .. last_cmd
+      print("making vert",last_cmd )
+      vim.fn.setcmdline(new_cmd)
+    end
+  end,
+})
