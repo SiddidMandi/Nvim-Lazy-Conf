@@ -19,7 +19,8 @@ vim.api.nvim_create_autocmd("ColorScheme", {
 
 vim.cmd([[au BufRead,BufNewFile *.wiki set filetype=vimwiki]])
 
-local lazypath = vim.fn.stdpath("config") .. "/lazyPlugs/lazy.nvim"
+--local lazypath = vim.fn.stdpath("config") .. "/lazyPlugs/lazy.nvim"
+local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
 if not vim.loop.fs_stat(lazypath) then
 	vim.fn.system({
 		"git",
@@ -197,25 +198,10 @@ require("lazy").setup({
 			require("setup/coding/null-ls")
 		end,
 	},
-	{
-		"tpope/vim-fugitive",
-		--lazy = { true }, cmd = { "G" }, --no need ot lazy
-		config = function()
-			vim.api.nvim_create_autocmd("CmdlineLeave", {
-				callback = function()
-					local last_cmd = vim.fn.getcmdline()
-					local cmd_type = vim.fn.getcmdtype() -- Get the type of the command (e.g. : for Ex command)
-
-					if cmd_type == ":" and last_cmd:match("^G") then
-						local new_cmd = "vertical " .. last_cmd
-						vim.fn.setcmdline(new_cmd)
-					end
-				end,
-			})
-		end,
-	},
+	{ "tpope/vim-fugitive" },
 }, {
-	root = vim.fn.stdpath("config") .. "/lazyPlugs", -- Custom directory for plugins
+	--root = vim.fn.stdpath("config") .. "/lazyPlugs", -- Custom directory for plugins
+	root = vim.fn.stdpath("data") .. "/lazyPlugs", -- .local
 })
 
 vim.cmd([[
