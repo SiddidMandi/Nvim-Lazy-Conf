@@ -17,6 +17,8 @@ vim.api.nvim_create_autocmd("ColorScheme", {
 	end,
 })
 
+vim.o.colorscheme = OceanicNext
+
 vim.cmd([[au BufRead,BufNewFile *.wiki set filetype=vimwiki]])
 
 --local lazypath = vim.fn.stdpath("config") .. "/lazyPlugs/lazy.nvim"
@@ -41,16 +43,13 @@ vim.g.maplocalleader = " "
 
 require("lazy").setup({
 	--config is after plugin is loaded, init is before
+	{ dir = vim.fn.stdpath("config") .. "/pack/plugins/start/vim-devicons", lazy = false },
 	{
-		dir = vim.fn.stdpath("config") .. "/pack/plugins/start/oceanic-next",
-
-		lazy = false,
+		"mhartington/oceanic-next",
 		config = function()
 			vim.cmd([[colorscheme OceanicNext]])
 		end,
 	},
-	{ dir = vim.fn.stdpath("config") .. "/pack/plugins/start/vim-devicons", lazy = false },
-	--{ dir = "/home/siddid/.config/nvim/pack/plugins/start/nerdtree", config = function() --require("setup/nerdTree") end, },
 	{
 		"christoomey/vim-tmux-navigator",
 		cmd = {
@@ -61,10 +60,10 @@ require("lazy").setup({
 			"TmuxNavigatePrevious",
 		},
 		keys = {
-			{ "<c-h>",  "<cmd><C-U>TmuxNavigateLeft<cr>" },
-			{ "<c-j>",  "<cmd><C-U>TmuxNavigateDown<cr>" },
-			{ "<c-k>",  "<cmd><C-U>TmuxNavigateUp<cr>" },
-			{ "<c-l>",  "<cmd><C-U>TmuxNavigateRight<cr>" },
+			{ "<c-h>", "<cmd><C-U>TmuxNavigateLeft<cr>" },
+			{ "<c-j>", "<cmd><C-U>TmuxNavigateDown<cr>" },
+			{ "<c-k>", "<cmd><C-U>TmuxNavigateUp<cr>" },
+			{ "<c-l>", "<cmd><C-U>TmuxNavigateRight<cr>" },
 			{ "<c-\\>", "<cmd><C-U>TmuxNavigatePrevious<cr>" },
 		},
 	},
@@ -80,8 +79,8 @@ require("lazy").setup({
 		end,
 	},
 	-- UI enhancements
-	{ "MunifTanjim/nui.nvim", opts = {} },
-	{ "rcarriga/nvim-notify", opts = {} },
+	{ "MunifTanjim/nui.nvim" },
+	{ "rcarriga/nvim-notify" },
 	{
 		"folke/noice.nvim",
 		config = function()
@@ -117,7 +116,7 @@ require("lazy").setup({
 			require("setup/vimwiki")
 		end,
 	},
-	{ "jalvesaq/Nvim-R",      ft = { "R", "r" } },
+	{ "jalvesaq/Nvim-R", ft = { "R", "r" } },
 	{
 		"lervag/vimtex",
 		ft = { "tex" },
@@ -145,9 +144,19 @@ require("lazy").setup({
 		end,
 	},
 
-	{ "nvim-treesitter/nvim-treesitter",     build = ":TSUpdate" },
+	{
+		"nvim-treesitter/nvim-treesitter",
+		build = ":TSUpdate",
+		opts = {
+			highlight = {
+				enable = true,
+				additional_vim_regex_highlighting = false,
+			},
+			ensure_installed = "all", -- Ensures all parsers are installed
+		},
+	},
 
-	-- LSP and Completion
+	-- Completion
 	{
 		"hrsh7th/nvim-cmp",
 		event = "InsertEnter",
@@ -155,26 +164,31 @@ require("lazy").setup({
 			require("setup/all-cmp")
 		end,
 	},
-	{ "hrsh7th/cmp-nvim-lsp",                event = "InsertEnter" },
-	{ "hrsh7th/cmp-buffer",                  event = "InsertEnter" },
-	{ "hrsh7th/cmp-path",                    event = "InsertEnter" },
-	{ "hrsh7th/cmp-cmdline",                 event = "InsertEnter" },
-	{ "micangl/cmp-vimtex",                  ft = "tex",           event = "InsertEnter" },
+	{ "hrsh7th/cmp-nvim-lsp", event = "InsertEnter" },
+	{ "hrsh7th/cmp-buffer", event = "InsertEnter" },
+	{ "hrsh7th/cmp-path", event = "InsertEnter" },
+	{ "hrsh7th/cmp-cmdline", event = "InsertEnter" },
+	{ "micangl/cmp-vimtex", ft = "tex", event = "InsertEnter" },
 
 	-- Snippets
-	{ "SirVer/ultisnips",                    event = "InsertEnter" },
+	{ "SirVer/ultisnips", event = "InsertEnter" },
 	{ "quangnguyen30192/cmp-nvim-ultisnips", event = "InsertEnter" },
 
 	--code editing
 	{
+		"williamboman/mason-lspconfig.nvim", --needed
+		--exclude = { "wiki", "vimwiki", "markdown" },
+	},
+	{
 		"williamboman/mason.nvim",
 		exclude = { "viki", "vimwiki", "markdown" },
-    opts = {install_root_dir = vim.fn.stdpath("config") .. "/Mason" } -- for default directory
-    -- opts = {} -- for default directory, opts does require("plugin").setup(opts)
+		opts = { install_root_dir = vim.fn.stdpath("config") .. "/Mason" }, -- for default directory
+		-- opts = {} -- for default directory, opts does require("plugin").setup(opts)
 	},
 	{
 		"neovim/nvim-lspconfig",
-		lazy = { true },
+		--lazy = { false },
+		--event = "InsertEnter",
 		exclude = { "wiki", "vimwiki", "markdown" },
 		config = function()
 			--require("setup/lsp-configs")
@@ -183,17 +197,60 @@ require("lazy").setup({
 	},
 
 	{
-		"williamboman/mason-lspconfig.nvim", --needed
-		exclude = { "wiki", "vimwiki", "markdown" },
-    opts = {}
-	},
-
-	{
 		"nvimtools/none-ls.nvim",
+		dependencies = {
+			"nvimtools/none-ls-extras.nvim",
+		},
 		config = function()
 			require("setup/coding/null-ls")
 		end,
 	},
+	{
+		"jay-babu/mason-null-ls.nvim",
+		dependencies = {
+			"williamboman/mason.nvim",
+			"nvimtools/none-ls.nvim",
+		},
+	},
+
+	{
+		"folke/trouble.nvim",
+		opts = {}, -- for default options, refer to the configuration section for custom setup.
+		cmd = "Trouble",
+		keys = {
+			{
+				"<leader>xx",
+				"<cmd>Trouble diagnostics toggle<cr>",
+				desc = "Diagnostics (Trouble)",
+			},
+			{
+				"<leader>xX",
+				"<cmd>Trouble diagnostics toggle filter.buf=0<cr>",
+				desc = "Buffer Diagnostics (Trouble)",
+			},
+			{
+				"<leader>cs",
+				"<cmd>Trouble symbols toggle focus=false<cr>",
+				desc = "Symbols (Trouble)",
+			},
+			{
+				"<leader>cl",
+				"<cmd>Trouble lsp toggle focus=false win.position=right<cr>",
+				desc = "LSP Definitions / references / ... (Trouble)",
+			},
+			{
+				"<leader>xL",
+				"<cmd>Trouble loclist toggle<cr>",
+				desc = "Location List (Trouble)",
+			},
+			{
+				"<leader>xQ",
+				"<cmd>Trouble qflist toggle<cr>",
+				desc = "Quickfix List (Trouble)",
+			},
+		},
+	},
+
 	{ "tpope/vim-fugitive" },
 }, {
 	--root = vim.fn.stdpath("config") .. "/lazyPlugs", -- Custom directory for plugins
@@ -216,13 +273,13 @@ set winheight=20
 set encoding=utf8
 set ignorecase
 set relativenumber
-set autochdir "this messes with harpoon
+"set autochdir "this messes with harpoon
 
 "keepin tabs
 "set expandtab
-set tabstop=4
-set shiftwidth=4
-set softtabstop=4
+set tabstop=2
+set shiftwidth=2
+set softtabstop=2
 
 set encoding=UTF-8
 set textwidth=75 "let g:coc_node_path_warning=0
@@ -267,8 +324,8 @@ mapper("n", "x", '"_x', opts1) --if this no work see below -idk how to do
 mapper("x", "x", '"_x', opts1)
 mapper("n", "dw", 'b"_dw', opts1)
 mapper("n", "daw", 'b"_dw', opts1)
-mapper("v", "<S-i>", "^", opts1)   -- stay in normal mode ok for visual
-mapper("v", "<S-a>", "$", opts1)   -- stay in normal mode
+mapper("v", "<S-i>", "^", opts1) -- stay in normal mode ok for visual
+mapper("v", "<S-a>", "$", opts1) -- stay in normal mode
 mapper("v", "<S-Y>", '"+y', opts1) -- stay in normal mode
 
 vim.cmd([[
@@ -277,24 +334,30 @@ vim.cmd([[
   autocmd FileType vimwiki setlocal softtabstop=8
 ]])
 
+vim.api.nvim_create_autocmd("CmdlineLeave", {
+	callback = function()
+		local last_cmd = vim.fn.getcmdline()
+		--local filetype = vim.bo.filetype
+		local cmd_type = vim.fn.getcmdtype()
+		--print(cmd_type)
+
+		if cmd_type == ":" and (last_cmd == "G" or last_cmd == "G log") then
+			local new_cmd = "vertical " .. last_cmd
+			print("making vert", last_cmd)
+			vim.fn.setcmdline(new_cmd)
+		end
+	end,
+})
 vim.cmd([[
 hi Search ctermfg=cyan ctermbg=black guibg=darkblue guifg=#ffffff gui=bold
 hi CurSearch ctermfg=cyan guibg=darkblue guifg=#ffffff gui=bold
 hi IncSearch ctermfg=cyan guibg=darkblue guifg=#ffffff gui=bold
 hi SpellBad ctermbg=red guibg=red
 ]])
+-- Set Git diff highlights to nothing (clears the colors)
+vim.api.nvim_set_hl(0, "DiffAdd", { bg = "none", fg = "none" }) -- Clears added lines highlight
+vim.api.nvim_set_hl(0, "DiffChange", { bg = "none", fg = "none" }) -- Clears changed lines highlight
+vim.api.nvim_set_hl(0, "DiffDelete", { bg = "none", fg = "none" }) -- Clears deleted lines highlight
+vim.api.nvim_set_hl(0, "DiffText", { bg = "none", fg = "none" }) -- Clears the highlight for text changes within a line
 
-vim.api.nvim_create_autocmd("CmdlineLeave", {
-  callback = function()
-    local last_cmd = vim.fn.getcmdline()
-    --local filetype = vim.bo.filetype
-    local cmd_type = vim.fn.getcmdtype()
-    --print(cmd_type)
-
-    if cmd_type == ":" and (last_cmd == "G" or last_cmd == "G log") then
-      local new_cmd = "vertical " .. last_cmd
-      print("making vert",last_cmd )
-      vim.fn.setcmdline(new_cmd)
-    end
-  end,
-})
+vim.treesitter.highlighter.active = true
