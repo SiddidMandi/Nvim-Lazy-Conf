@@ -16,7 +16,7 @@ vim.api.nvim_create_autocmd("ColorScheme", {
 		end
 	end,
 })
-
+--formatting = stylua
 vim.o.colorscheme = OceanicNext
 
 vim.cmd([[au BufRead,BufNewFile *.wiki set filetype=vimwiki]])
@@ -60,10 +60,10 @@ require("lazy").setup({
 			"TmuxNavigatePrevious",
 		},
 		keys = {
-			{ "<c-h>", "<cmd><C-U>TmuxNavigateLeft<cr>" },
-			{ "<c-j>", "<cmd><C-U>TmuxNavigateDown<cr>" },
-			{ "<c-k>", "<cmd><C-U>TmuxNavigateUp<cr>" },
-			{ "<c-l>", "<cmd><C-U>TmuxNavigateRight<cr>" },
+			{ "<c-h>",  "<cmd><C-U>TmuxNavigateLeft<cr>" },
+			{ "<c-j>",  "<cmd><C-U>TmuxNavigateDown<cr>" },
+			{ "<c-k>",  "<cmd><C-U>TmuxNavigateUp<cr>" },
+			{ "<c-l>",  "<cmd><C-U>TmuxNavigateRight<cr>" },
 			{ "<c-\\>", "<cmd><C-U>TmuxNavigatePrevious<cr>" },
 		},
 	},
@@ -116,7 +116,7 @@ require("lazy").setup({
 			require("setup/vimwiki")
 		end,
 	},
-	{ "jalvesaq/Nvim-R", ft = { "R", "r" } },
+	{ "jalvesaq/Nvim-R",      ft = { "R", "r" } },
 	{
 		"lervag/vimtex",
 		ft = { "tex" },
@@ -172,7 +172,7 @@ require("lazy").setup({
 	{ "f3fora/cmp-spell",                    ft = "tex",           event = "InsertEnter" },
 
 	-- Snippets
-	{ "SirVer/ultisnips", event = "InsertEnter" },
+	{ "SirVer/ultisnips",                    event = "InsertEnter" },
 	{ "quangnguyen30192/cmp-nvim-ultisnips", event = "InsertEnter" },
 
 	--code editing
@@ -325,8 +325,8 @@ mapper("n", "x", '"_x', opts1) --if this no work see below -idk how to do
 mapper("x", "x", '"_x', opts1)
 mapper("n", "dw", 'b"_dw', opts1)
 mapper("n", "daw", 'b"_dw', opts1)
-mapper("v", "<S-i>", "^", opts1) -- stay in normal mode ok for visual
-mapper("v", "<S-a>", "$", opts1) -- stay in normal mode
+mapper("v", "<S-i>", "^", opts1)   -- stay in normal mode ok for visual
+mapper("v", "<S-a>", "$", opts1)   -- stay in normal mode
 mapper("v", "<S-Y>", '"+y', opts1) -- stay in normal mode
 
 vim.cmd([[
@@ -356,23 +356,23 @@ hi IncSearch ctermfg=cyan guibg=darkblue guifg=#ffffff gui=bold
 hi SpellBad ctermbg=red guibg=red
 ]])
 -- Set Git diff highlights to nothing (clears the colors)
-vim.api.nvim_set_hl(0, "DiffAdd", { bg = "none", fg = "none" }) -- Clears added lines highlight
+vim.api.nvim_set_hl(0, "DiffAdd", { bg = "none", fg = "none" })    -- Clears added lines highlight
 vim.api.nvim_set_hl(0, "DiffChange", { bg = "none", fg = "none" }) -- Clears changed lines highlight
 vim.api.nvim_set_hl(0, "DiffDelete", { bg = "none", fg = "none" }) -- Clears deleted lines highlight
-vim.api.nvim_set_hl(0, "DiffText", { bg = "none", fg = "none" }) -- Clears the highlight for text changes within a line
+vim.api.nvim_set_hl(0, "DiffText", { bg = "none", fg = "none" })   -- Clears the highlight for text changes within a line
 
 vim.opt.spelllang = { "en_us" }
 vim.api.nvim_create_autocmd("CmdlineLeave", {
-  callback = function()
-    local last_cmd = vim.fn.getcmdline()
-    --local filetype = vim.bo.filetype
-    local cmd_type = vim.fn.getcmdtype()
-    --print(cmd_type)
+	callback = function()
+		local last_cmd = vim.fn.getcmdline()
+		--local filetype = vim.bo.filetype
+		local cmd_type = vim.fn.getcmdtype()
+		--print(cmd_type)
 
-    if cmd_type == ":" and (last_cmd == "G" or last_cmd == "G log") then
-      local new_cmd = "vertical " .. last_cmd
-      print("making vert",last_cmd )
-      vim.fn.setcmdline(new_cmd)
-    end
-  end,
+		if cmd_type == ":" and (last_cmd == "G" or last_cmd == "G log") then
+			local new_cmd = "vertical " .. last_cmd
+			print("making vert", last_cmd)
+			vim.fn.setcmdline(new_cmd)
+		end
+	end,
 })
