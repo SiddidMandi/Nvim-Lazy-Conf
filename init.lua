@@ -164,11 +164,12 @@ require("lazy").setup({
 			require("setup/all-cmp")
 		end,
 	},
-	{ "hrsh7th/cmp-nvim-lsp", event = "InsertEnter" },
-	{ "hrsh7th/cmp-buffer", event = "InsertEnter" },
-	{ "hrsh7th/cmp-path", event = "InsertEnter" },
-	{ "hrsh7th/cmp-cmdline", event = "InsertEnter" },
-	{ "micangl/cmp-vimtex", ft = "tex", event = "InsertEnter" },
+	{ "hrsh7th/cmp-nvim-lsp",                event = "InsertEnter" },
+	{ "hrsh7th/cmp-buffer",                  event = "InsertEnter" },
+	{ "hrsh7th/cmp-path",                    event = "InsertEnter" },
+	{ "hrsh7th/cmp-cmdline",                 event = "InsertEnter" },
+	{ "micangl/cmp-vimtex",                  ft = "tex",           event = "InsertEnter" },
+	{ "f3fora/cmp-spell",                    ft = "tex",           event = "InsertEnter" },
 
 	-- Snippets
 	{ "SirVer/ultisnips", event = "InsertEnter" },
@@ -360,4 +361,18 @@ vim.api.nvim_set_hl(0, "DiffChange", { bg = "none", fg = "none" }) -- Clears cha
 vim.api.nvim_set_hl(0, "DiffDelete", { bg = "none", fg = "none" }) -- Clears deleted lines highlight
 vim.api.nvim_set_hl(0, "DiffText", { bg = "none", fg = "none" }) -- Clears the highlight for text changes within a line
 
-vim.treesitter.highlighter.active = true
+vim.opt.spelllang = { "en_us" }
+vim.api.nvim_create_autocmd("CmdlineLeave", {
+  callback = function()
+    local last_cmd = vim.fn.getcmdline()
+    --local filetype = vim.bo.filetype
+    local cmd_type = vim.fn.getcmdtype()
+    --print(cmd_type)
+
+    if cmd_type == ":" and (last_cmd == "G" or last_cmd == "G log") then
+      local new_cmd = "vertical " .. last_cmd
+      print("making vert",last_cmd )
+      vim.fn.setcmdline(new_cmd)
+    end
+  end,
+})
