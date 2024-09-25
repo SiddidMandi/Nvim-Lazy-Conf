@@ -44,13 +44,21 @@ vim.keymap.set('n', '<leader>t', ':VimwikiTable<CR>', { noremap = true, silent =
 
 -- Define autocmds for special characters in the 'languages' wiki
 
-vim.api.nvim_create_autocmd("FileType", {
-  pattern = { "vimwiki", "wiki" },
-  callback = function()
-    -- Set the keybindings for the buffer
-    vim.keymap.set('i', 'uuu', 'ü', { buffer = true })
-    vim.keymap.set('i', 'ooo', 'ö', { buffer = true })
-    vim.keymap.set('i', 'aaa', 'ä', { buffer = true })
-    vim.keymap.set('i', 'sss', 'ß', { buffer = true })
-  end,
+-- Define autocmds for special characters in the 'languages' wiki
+local wiki_group = vim.api.nvim_create_augroup("WikiBindings", { clear = true })
+
+-- Define a function to set the keymaps
+local function set_wiki_keymaps()
+    local opts = { buffer = true }
+    vim.keymap.set('i', 'uuu', 'ü', opts)
+    vim.keymap.set('i', 'ooo', 'ö', opts)
+    vim.keymap.set('i', 'aaa', 'ä', opts)
+    vim.keymap.set('i', 'sss', 'ß', opts)
+end
+
+-- Create an autocmd that triggers on entering any *.wiki file in the specified directory
+vim.api.nvim_create_autocmd("BufEnter", {
+    pattern = vim.fn.expand("$HOME") .. "/Documents/vimwiki/languages/*.wiki",
+    callback = set_wiki_keymaps,
+    group = wiki_group,
 })
