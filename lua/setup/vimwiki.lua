@@ -43,7 +43,14 @@ vim.api.nvim_create_autocmd('FileType', {
 vim.keymap.set('n', '<leader>t', ':VimwikiTable<CR>', { noremap = true, silent = true })
 
 -- Define autocmds for special characters in the 'languages' wiki
-vim.keymap.set('i', 'uuu', 'ü', { buffer = true })
-vim.keymap.set('i', 'ooo', 'ö', { buffer = true })
-vim.keymap.set('i', 'aaa', 'ä', { buffer = true })
-vim.keymap.set('i', 'sss', 'ß', { buffer = true })
+
+vim.api.nvim_create_autocmd("FileType", {
+  pattern = { "vimwiki", "wiki" },
+  callback = function()
+    -- Set the keybindings for the buffer
+    vim.keymap.set('i', 'uuu', 'ü', { buffer = true })
+    vim.keymap.set('i', 'ooo', 'ö', { buffer = true })
+    vim.keymap.set('i', 'aaa', 'ä', { buffer = true })
+    vim.keymap.set('i', 'sss', 'ß', { buffer = true })
+  end,
+})
