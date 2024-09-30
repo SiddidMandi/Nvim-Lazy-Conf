@@ -98,13 +98,7 @@ require("lazy").setup({
 		},
 		keys = { "<leader>n" },
 		config = function()
-			require("neo-tree").setup({
-				filesystem = {
-					bind_to_cwd = false, -- Prevent Neo-tree from changing the working directory
-					--cwd_target = { current_dir = true }, -- Ensure Neo-tree uses the current working directory
-				},
-			})
-			vim.api.nvim_set_keymap("n", "<leader>n", ":Neotree toggle<CR>", { noremap = true, silent = true })
+      require("setup/neotree")
 		end,
 	},
 
