@@ -87,6 +87,12 @@ require("lazy").setup({
 			require("setup/noice")
 		end,
 	},
+  {
+    "stevearc/dressing.nvim",
+    opts = {},
+  },
+  -- end
+
 
 	{
 		"nvim-neo-tree/neo-tree.nvim",
@@ -98,7 +104,7 @@ require("lazy").setup({
 		},
 		keys = { "<leader>n" },
 		config = function()
-      require("setup/neotree")
+      require("setup/neo-tree")
 		end,
 	},
 
