@@ -92,7 +92,10 @@ require("lazy").setup({
     opts = {},
   },
   -- end
-
+  {
+    "junegunn/vim-peekaboo",
+    --"gennaro-tedesco/nvim-peekup",
+  },
 
 	{
 		"nvim-neo-tree/neo-tree.nvim",
