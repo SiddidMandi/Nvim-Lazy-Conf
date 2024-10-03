@@ -41,6 +41,15 @@ require("neo-tree").setup({
 		bind_to_cwd = false, -- Prevent Neo-tree from changing the working directory
 		--cwd_target = { current_dir = true }, -- Ensure Neo-tree uses the current working directory
 	},
+  event_handlers = {
+    {
+      event = "file_opened",
+      handler = function()
+        -- Automatically close Neo-tree after opening a file
+        require("neo-tree.command").execute({ action = "close" })
+      end,
+    },
+  },
 })
 
 vim.api.nvim_set_keymap("n", "<leader>n", ":Neotree reveal left<CR>", { noremap = true, silent = true })
