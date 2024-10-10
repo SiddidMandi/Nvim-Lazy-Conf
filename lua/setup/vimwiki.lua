@@ -13,7 +13,7 @@ vim.g.vimwiki_listsyms = '✗○◐●✓'
 -- Define the wiki list
 local wiki_1 = {
   path = '~/Documents/vimwiki/wiki_Personal',
-  nested_syntaxes = { python = 'python', ['c++'] = 'cpp' },
+  nested_syntaxes = { python = 'python', ['c++'] = 'cpp', sh = 'bash' },
   listyms = '✗○◐●✓',
 }
 
