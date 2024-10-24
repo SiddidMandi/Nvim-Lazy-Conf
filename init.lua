@@ -379,3 +379,11 @@ vim.api.nvim_create_autocmd("CmdlineLeave", {
 		end
 	end,
 })
+
+vim.api.nvim_create_autocmd("CmdlineLeave", {
+    callback = function()
+        vim.defer_fn(function()
+            vim.cmd('echo ""')  -- Clear the command area
+        end, 2000)  -- 2000 milliseconds = 2 seconds
+    end,
+})
